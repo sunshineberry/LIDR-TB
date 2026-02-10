@@ -4,11 +4,9 @@ from typing import List, Dict, Tuple
 import extract_entity as ex_entity
 from llm_model import llm
 
-# 初始化
-# -----------------------------
+# Load spacy model
 nlp = spacy.load("en_core_sci_sm",exclude=["ner", "lemmatizer", "attribute_ruler"])
-print(f"当前生效的管道组件: {nlp.pipe_names}")
-# === 历史管理 ===
+
 conversation_history=[]
 def save_to_history(question: str, entities: List[Dict]):
     conversation_history.append({
@@ -17,21 +15,19 @@ def save_to_history(question: str, entities: List[Dict]):
     })
 
 # -----------------------------
-# 规则 1：并列实体拆解（药物/对象）
+# Rule 1: Decomposition of coordinate entities (Drugs/Objects)
 # -----------------------------
 def split_conj_entities_correct(question: str, nlp, entities: list = None) -> List[str]:
     """
-    只对识别到的实体（如药物、目标）做并列拆解。
+    Decompose coordinate entities (e.g., Drugs, Targets) only.
     entities: [{"id": "Amlodipine", "type": "Drug"}, ...]
     """
     if not entities:
-        return []  # 没有实体就不拆
-
+        return []  
     doc = nlp(question)
     for token in doc:
         if token.dep_ == "conj" and token.head.dep_ in {"pobj", "dobj", "nsubj"}:
             head = token.head
-            # 只拆实体
             if head.text not in [e["id"] for e in entities] or token.text not in [e["id"] for e in entities]:
                 continue
             prefix_tokens = [t.text for t in doc[:head.i]]
@@ -45,25 +41,22 @@ def split_conj_entities_correct(question: str, nlp, entities: list = None) -> Li
     return []
 
 # -----------------------------
-# 规则 2：并列名词短语共享谓词
+# Rule 2: Coordinate noun phrases with shared predicates.
 # -----------------------------
 def split_conj_noun_phrase_atomic(question: str, nlp, entities: list = None) -> List[str]:
     """
-    只对识别到的实体（如药物、目标）进行并列名词拆解。
+    Perform coordinate noun decomposition only on identified entities (e.g., Drugs, Targets).。
     """
     if not entities:
-        return [question]  # 没有实体就不拆
-
+        return [question]
     doc = nlp(question)
     entity_texts = [e["id"] for e in entities]
 
     for token in doc:
         if token.dep_ == "conj" and token.head.pos_ == "NOUN":
-            head = token.head  # 先定义 head
-            # 只有当 head 或 token 是实体时才拆
+            head = token.head  
             if head.text not in entity_texts and token.text not in entity_texts:
                 continue
-
             mods = [t.text for t in head.lefts if t.dep_ in {"amod", "compound"}]
             head_phrase = " ".join(mods + [head.text])
             conj_phrase = " ".join(mods + [token.text])
@@ -77,13 +70,12 @@ def split_conj_noun_phrase_atomic(question: str, nlp, entities: list = None) -> 
     return [question]
 
 # -----------------------------
-# 判断是否复杂句（需要 LLM 拆解）
+# Determine if the query is a complex sentence (requires LLM decomposition)
 # -----------------------------
 def is_complex_sentence(question: str) -> bool:
     q_lower = question.lower()
     wh_words = {"which", "what", "who", "where", "when", "why", "how"}
     yesno_starts = ("is ", "are ", "does ", "do ", "can ", "could ", "will ", "would ")
-    # 如果包含 ", and" 或 " and " 并且是 WH 或 yes/no 开头
     return (", and" in q_lower or " and " in q_lower) and (
             any(w in q_lower for w in wh_words) or q_lower.startswith(yesno_starts)
     )
@@ -91,18 +83,15 @@ def is_complex_sentence(question: str) -> bool:
 
 def parse_llm_json_output(text: str) -> list:
     """
-    将 LLM 返回的 JSON 输出提取为 Python 列表
+    Extract JSON output from LLM and parse into a Python list
     """
-    # 提取方括号中的内容
     match = re.search(r"\[.*\]", text, re.DOTALL)
     if not match:
-        # fallback 返回原句
         return [text.strip()]
 
     json_str = match.group(0)
     try:
         data = json.loads(json_str)
-        # 去掉多余空格
         return [q.strip() for q in data if q.strip()]
     except Exception as e:
         print(f"⚠️ JSON parsing failed: {e}\nContent: {json_str}")
@@ -110,7 +99,7 @@ def parse_llm_json_output(text: str) -> list:
 
 
 # -----------------------------
-# 规则 3：yes/no + WH 并列问题 → LLM
+# Rule 3: Combined Yes/No and WH-questions -> LLM
 # -----------------------------
 def split_yesno_wh_with_llm(question: str) -> List[str]:
     prompt = f"""
@@ -138,15 +127,11 @@ def split_yesno_wh_with_llm(question: str) -> List[str]:
     Output: ["Are there any tuberculosis repositioning studies involving Mefloquine?", "What repurposing methods were used for Mefloquine?"]
     """
     messages = [{"role": "user", "content": prompt}]
-    # 调用 llm_call，expect_json=True 返回 JSON 列表
+    # Extract JSON output from LLM and convert to a Python list
     content = llm.llm_call(messages, temperature=0, max_tokens=256, expect_json=False)
 
     return parse_llm_json_output(content)
 
-
-# -----------------------------
-# 主函数：原子问题拆解
-# -----------------------------
 def atomic_question_decomposition(question: str) -> Tuple[List[str], List[Dict]]:
     """
     Decompose a question into atomic questions and extract entities.
@@ -155,37 +140,32 @@ def atomic_question_decomposition(question: str) -> Tuple[List[str], List[Dict]]
 
     question = question.strip().rstrip("?") + "?"
 
-    # 1️⃣ 实体抽取（只做一次）
+    # 1. entity extraction
     entities = ex_entity.extract_entities(
         question,
         history=conversation_history
     )
-    # 2️⃣ 默认结果（不拆）
+    # 2. Default: No decomposition
     atomic_questions = [question]
-    # 3️⃣ 药物实体并列拆解
+    # 3. Decompose coordinate drug entities
     res = split_conj_entities_correct(question, nlp)
     if res and len(res) > 1:
         atomic_questions = res
-    # 4️⃣ 名词短语并列拆解
+    # 4. Decompose coordinate noun phrases
     elif (res := split_conj_noun_phrase_atomic(question, nlp)) and len(res) > 1:
         atomic_questions = res
-    # 5️⃣ 复杂句 → LLM 拆解
+    # 5. Complex sentences -> LLM-based decomposition
     elif is_complex_sentence(question):
         atomic_questions = split_yesno_wh_with_llm(question)
-    # 6️⃣ 统一保存历史（一次且必然）
+    # 6. Unified history logging (Mandatory & Atomic)
     save_to_history(question, entities)
 
     return atomic_questions, entities
 
-# === 从文件读取问题列表 ===
 def load_queries_from_file(file_path: str):
-    """
-    读取 JSON 文件，提取每个 entry 的 question
-    """
     with open(file_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
-    # data["entries"] 是列表，每个 entry 都有 "question"
     queries = [entry.get("question", "") for entry in data.get("entries", [])]
     return queries
 
@@ -201,20 +181,5 @@ def save_atomic_questions_to_json(input_questions: List[str], output_file: str):
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump({"questions": output_data}, f, indent=2, ensure_ascii=False)
 
-# -----------------------------
-# examples
-# -----------------------------
-if __name__ == "__main__":
-    # input_file = "./test_sets/Single-Q.json"  
-    # test_questions = load_queries_from_file(input_file)
-    # save_atomic_questions_to_json(test_questions, "expanded_questions1.json")
-    test_questions = [
-        "What is the approved indication of Flupirtine, and is this drug currently approved or still in development?",
-    ]
 
-    for q in test_questions:
-        print(f"\nInput: {q}")
-        questions,entities= atomic_question_decomposition(q, nlp)
-        print(questions)
-        print(entities)
 
