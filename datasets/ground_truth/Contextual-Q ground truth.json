@@ -1,0 +1,138 @@
+{
+  "sentences": [
+    {
+      "sentence_id": "S1",
+      "text": "What are the known targets of dicoumarol?",
+      "expanded_questions": [
+        {
+          "qid": "S1_Q1",
+          "question": "What are the known targets of dicoumarol?",
+          "entity": "dicoumarol",
+          "intent": "target",
+          "sub_intent": [null]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S2",
+      "text": "For each of these targets, which biological pathways are they involved in?",
+      "expanded_questions": [
+        {
+          "qid": "S2_Q1",
+          "question": "For each of these targets, which biological pathways are they involved in?",
+          "entity": "dicoumarol",
+          "intent": "pathway",
+          "sub_intent": [null]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S3",
+      "text": "Can you summarize these pathway functions?",
+      "expanded_questions": [
+        {
+          "qid": "S3_Q1",
+          "question": "Can you summarize these pathway functions?",
+          "entity": "dicoumarol",
+          "intent": "pathway",
+          "sub_intent": ["pathway class"]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S4",
+      "text": "What is the MIC value of disulfiram?",
+      "expanded_questions": [
+        {
+          "qid": "S4_Q1",
+          "question": "What is the MIC value of disulfiram?",
+          "entity": "disulfiram",
+          "intent": "drug sensitivity test",
+          "sub_intent": [
+            "mic"
+          ]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S5",
+      "text": "Which type of test strain was used in this drug sensitivity test?",
+      "expanded_questions": [
+        {
+          "qid": "S5_Q1",
+          "question": "Which type of test strain was used in this drug sensitivity test?",
+          "entity": "disulfiram",
+          "intent": "drug sensitivity test",
+          "sub_intent": [
+            "test strain"
+          ]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S6",
+      "text": "Were multiple strains tested, or just a single strain?",
+      "expanded_questions": [
+        {
+          "qid": "S6_Q1",
+          "question": "Were multiple strains tested, or just a single strain?",
+          "entity": "disulfiram",
+          "intent": "drug sensitivity test",
+          "sub_intent": [null]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S7",
+      "text": "What type of drug is tafenoquine?",
+      "expanded_questions": [
+        {
+          "qid": "S7_Q1",
+          "question": "What type of drug is tafenoquine?",
+          "entity": "tafenoquine",
+          "intent": "drug information",
+          "sub_intent": ["drug types"]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S8",
+      "text": "Has tafenoquine been tested in any repurposing experiments for tuberculosis?",
+      "expanded_questions": [
+        {
+          "qid": "S8_Q1",
+          "question": "Has tafenoquine been tested in any repurposing experiments for tuberculosis?",
+          "entity": "tafenoquine",
+          "intent": "drug repurposing assay",
+          "sub_intent": [null]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S9",
+      "text": "What were the observed effects or outcomes from these repurposing experiments?",
+      "expanded_questions": [
+        {
+          "qid": "S9_Q1",
+          "question": "What were the observed effects or outcomes from these repurposing experiments?",
+          "entity": "tafenoquine",
+          "intent": "drug repurposing assay",
+          "sub_intent": ["effects"]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S10",
+      "text": "Can you provide the references or publications reporting these repurposing studies?",
+      "expanded_questions": [
+        {
+          "qid": "S10_Q1",
+          "question": "Can you provide the references or publications reporting these repurposing studies?",
+          "entity": "tafenoquine",
+          "intent": "drug repurposing assay",
+          "sub_intent": ["publications or references"]
+        }
+      ]
+    }
+  ]
+}

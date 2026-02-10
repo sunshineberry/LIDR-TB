@@ -1,0 +1,286 @@
+{
+  "sentences": [
+    {
+      "sentence_id": "S1",
+      "text": "What are the targets of Paromomycin?",
+      "expanded_questions": [
+        {
+          "qid": "S1_Q1",
+          "question": "What are the targets of Paromomycin?",
+          "entity": "paromomycin",
+          "intent": "target",
+          "sub_intent": [null]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S2",
+      "text": "Can you list the known gene targets of Triflusal?",
+      "expanded_questions": [
+        {
+          "qid": "S2_Q1",
+          "question": "Can you list the known gene targets of Triflusal?",
+          "entity": "triflusal",
+          "intent": "target",
+          "sub_intent": [null]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S3",
+      "text": "What type of drug is Isoniazid classified as?",
+      "expanded_questions": [
+        {
+          "qid": "S3_Q1",
+          "question": "What type of drug is Isoniazid classified as?",
+          "entity": "isoniazid",
+          "intent": "drug information",
+          "sub_intent": ["types"]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S4",
+      "text": "Has Mefloquine been approved yet?",
+      "expanded_questions": [
+        {
+          "qid": "S4_Q1",
+          "question": "Has Mefloquine been approved yet?",
+          "entity": "mefloquine",
+          "intent": "drug information",
+          "sub_intent": [
+            "approval status"
+          ]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S5",
+      "text": "What is Flupirtine primarily indicated for?",
+      "expanded_questions": [
+        {
+          "qid": "S5_Q1",
+          "question": "What is Flupirtine primarily indicated for?",
+          "entity": "flupirtine",
+          "intent": "drug information",
+          "sub_intent": [
+            "indication"
+          ]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S6",
+      "text": "What are the biological pathways associated with nitrofural?",
+      "expanded_questions": [
+        {
+          "qid": "S6_Q1",
+          "question": "What are the biological pathways associated with nitrofural?",
+          "entity": "nitrofural",
+          "intent": "pathway",
+          "sub_intent": [null]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S7",
+      "text": "Are there any repositioning studies for quinacrine in TB treatment?",
+      "expanded_questions": [
+        {
+          "qid": "S7_Q1",
+          "question": "Are there any repositioning studies for quinacrine in TB treatment?",
+          "entity": "quinacrine",
+          "intent": "drug repurposing assay",
+          "sub_intent": [null]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S8",
+      "text": "What effects were observed in the repurposing assays of Paromomycin?",
+      "expanded_questions": [
+        {
+          "qid": "S8_Q1",
+          "question": "What effects were observed in the repurposing assays of Paromomycin?",
+          "entity": "paromomycin",
+          "intent": "drug repurposing assay",
+          "sub_intent": [
+            "effects"
+          ]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S9",
+      "text": "Can you list the repurposing methods applied to Mefloquine?",
+      "expanded_questions": [
+        {
+          "qid": "S9_Q1",
+          "question": "Can you list the repurposing methods applied to Mefloquine?",
+          "entity": "mefloquine",
+          "intent": "drug repurposing assay",
+          "sub_intent": [
+            "repurposing methods"
+          ]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S10",
+      "text": "What is the MIC value of Carprofen in drug sensitivity experiments?",
+      "expanded_questions": [
+        {
+          "qid": "S10_Q1",
+          "question": "What is the MIC value of Carprofen in drug sensitivity experiments?",
+          "entity": "carprofen",
+          "intent": "drug sensitivity test",
+          "sub_intent": [
+            "mic value"
+          ]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S11",
+      "text": "What test strain types are associated with the artesunate DST results?",
+      "expanded_questions": [
+        {
+          "qid": "S11_Q1",
+          "question": "What test strain types are associated with the artesunate DST results?",
+          "entity": "artesunate",
+          "intent": "drug sensitivity test",
+          "sub_intent": [
+            "test strain type"
+          ]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S12",
+      "text": "Which reference strain was used in the idarubicin sensitivity tests?",
+      "expanded_questions": [
+        {
+          "qid": "S12_Q1",
+          "question": "Which reference strain was used in the selamectin sensitivity tests?",
+          "entity": "idarubicin",
+          "intent": "drug sensitivity test",
+          "sub_intent": [
+            "reference strains"
+          ]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S13",
+      "text": "What are the targets of Xylomycin?",
+      "expanded_questions": [
+        {
+          "qid": "S13_Q1",
+          "question": "What are the targets of Xylomycin?",
+          "entity": "xylomycin",
+          "intent": "target",
+          "sub_intent": [null]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S14",
+      "text": "Can you list the UniProt ID of the Isepamicin target?",
+      "expanded_questions": [
+        {
+          "qid": "S14_Q1",
+          "question": "Can you list the UniProt ID of the Isepamicin target?",
+          "entity": "isepamicin",
+          "intent": "target",
+          "sub_intent": [
+            "uniprot id"
+          ]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S15",
+      "text": "What is the pathway class of the KEGG pathway mapped from pknB?",
+      "expanded_questions": [
+        {
+          "qid": "S15_Q1",
+          "question": "What is the pathway class of the KEGG pathway mapped from pknB?",
+          "entity": "pknB",
+          "intent": "pathway",
+          "sub_intent": ["pathway class"]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S16",
+      "text": "Can you provide references linked to the Mefloquine repurposing assay?",
+      "expanded_questions": [
+        {
+          "qid": "S16_Q1",
+          "question": "Can you provide references linked to the Mefloquine repurposing assay?",
+          "entity": "mefloquine",
+          "intent": "drug repurposing assay",
+          "sub_intent": [
+            "references"
+          ]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S17",
+      "text": "Provide references reporting the gene targets of diacerein",
+      "expanded_questions": [
+        {
+          "qid": "S17_Q1",
+          "question": "Provide references reporting the gene targets of diacerein?",
+          "entity": "diacerein",
+          "intent": "target",
+          "sub_intent": [
+            "references"
+          ]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S18",
+      "text": "Which biological pathways are experimentally associated with Triflusal in the treatment of tuberculosis?",
+      "expanded_questions": [
+        {
+          "qid": "S18_Q1",
+          "question": "Which biological pathways are experimentally associated with Triflusal in the treatment of tuberculosis?",
+          "entity": "triflusal",
+          "intent": "pathway",
+          "sub_intent": [null]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S19",
+      "text": "Can Primaquine treat malaria?",
+      "expanded_questions": [
+        {
+          "qid": "S19_Q1",
+          "question": "Can Primaquine treat malaria?",
+          "entity": "Primaquine",
+          "intent": "drug information",
+          "sub_intent": ["indication"]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S20",
+      "text": "What is your work today?",
+      "expanded_questions": [
+        {
+          "qid": "S20_Q1",
+          "question": "What is your work today?",
+          "entity": "unknown",
+          "intent": "unknown",
+          "sub_intent": [
+            "unknown"
+          ]
+        }
+      ]
+    }
+  ]
+}
