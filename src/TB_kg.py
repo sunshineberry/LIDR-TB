@@ -27,7 +27,7 @@ class Neo4jKnowledgeBase:
         return False
 
     def _run_query(self, query: str, **params) -> List[Dict]:
-        """统一执行查询并返回结果列表"""
+        """Execute query uniformly and return the result list"""
         try:
             with self.driver.session() as session:
                 return list(session.run(query, **params))
@@ -35,12 +35,12 @@ class Neo4jKnowledgeBase:
             logging.warning(f"Query execution failed: {e}")
             return []
 
-    # === 内部方法：处理节点属性小写化 ===
+    # === Internal method: convert node attributes to lowercase ===
     @staticmethod
     def _lower_props(node: Dict) -> Dict:
         return {k.lower(): v for k, v in node.items()}
 
-    # === 内部方法：格式化 references ===
+    # === Internal method: format references ===
     def _format_references(self, ref_ids: List[str]) -> List[Dict]:
         ref_map = self.get_references_by_ids(ref_ids)
         return [
@@ -53,9 +53,9 @@ class Neo4jKnowledgeBase:
             for rid, info in ref_map.items()
         ]
 
-    # === 获取所有节点 ===
+    # === Obtain all nodes ===
     def get_all_nodes(self, labels: List[str] = ["Drug", "Target", "DSTest", "RepurposingExp"]) -> (List[str], List[str]):
-        """返回所有节点的 uuid 列表和文本表示"""
+        """Return a list of UUIDs and text representations for all nodes"""
         nodes, uuids = [], []
         for label in labels:
             query = f"MATCH (n:{label}) RETURN n.uuid AS uuid, properties(n) AS props"
@@ -67,14 +67,12 @@ class Neo4jKnowledgeBase:
                 uuids.append(uuid)
         return uuids, nodes
 
-    # === 查找 query 中的药物 ===
+    # === Find drugs in the query ===
     def find_drugs_in_query(self, query: str) -> List[str]:
-        """从 query 中提取可能药物并匹配数据库"""
+        """Extract potential drugs from the query and match against the database"""
         words = re.findall(r'[A-Za-z0-9\-]+', query)
         if not words:
             return ["unknown"]
-
-        # 一次性查询，避免循环 session
         cypher = """
         MATCH (d:Drug)
         WHERE any(w IN $words WHERE toLower(d.Drug_name) CONTAINS toLower(w))
@@ -83,12 +81,12 @@ class Neo4jKnowledgeBase:
         records = self._run_query(cypher, words=words)
         return list({r["name"] for r in records})
 
-    # === 查询 Drug 信息 ===
+    # === Retrive drug information ===
     def search_drug_info(self, drug_name: str) -> list:
         """
-        返回 Drug 信息列表，每个元素为字典，key 全部小写。
-        支持大小写不敏感匹配 drug_name。
-        如果查询不到，返回 [{}]
+        Return a list of drug info dictionaries with all keys in lowercase. 
+        Supports case-insensitive matching for drug_name. 
+        Returns [{}] if no results are found.
         """
         query = """
         MATCH (d:Drug)
@@ -99,7 +97,7 @@ class Neo4jKnowledgeBase:
 
         for rec in self._run_query(query, drug_name=drug_name):
             node = rec["d"]
-            # 自动把所有 key 转小写
+            # Automatically convert all keys to lowercase
             mapped = {k.lower(): v for k, v in node.items()}
             result_list.append(mapped)
 
@@ -107,7 +105,7 @@ class Neo4jKnowledgeBase:
             result_list = [{}]
         return result_list
 
-    # === 查询 Drug 靶点 ===
+    # === Retrive drug-target ===
     def search_drug_targets(self, drug_name: str) -> Dict:
         targets = []
         query = """
@@ -125,22 +123,21 @@ class Neo4jKnowledgeBase:
             target_item = {
                 "target_id": node.get("target_id"),
                 "rv_id": node.get("rv_id"),
-                "product": node.get("product") or "未知蛋白",
+                "product": node.get("product") or "unknown protein",
                 "ncbi_geneid": node.get("ncbi_geneid"),
                 "uniprot_id": node.get("uniprot_id"),
                 "functions": node.get("functions"),
                 "gene_name": node.get("gene_name"),
-                "functional_type": node.get("functional type"),  # ⚠ 如果数据里本来是 functional type，要统一改成 functional_type
+                "functional_type": node.get("functional type"),  
                 "evidence_refs": evidence_refs,
                 "references": self._format_references(evidence_refs)
             }
 
-            # 强制全部 key 转小写（即便上面已经是小写，也确保稳定性）
             target_item = {k.lower(): v for k, v in target_item.items()}
             targets.append(target_item)
         return targets
 
-    # === 查询重定位实验 ===
+    # === Retrieve repurposing experimental assays ===
     def search_experiments(self, drug_name: str) -> Dict:
         experiments = []
         query = """
@@ -169,7 +166,7 @@ class Neo4jKnowledgeBase:
             })
         return {"experiments": experiments}
 
-    # === 查询 DSTest 实验 ===
+    # === Retrieve Drug susceptibility tests ===
     def search_dstest_experiments(self, drug_name: str) -> list:
         dstest_experiments = []
         query = """
@@ -196,7 +193,7 @@ class Neo4jKnowledgeBase:
 
         return dstest_experiments
 
-    # === 查询 Pathway ===
+    # === Retrieve Pathway ===
     def search_pathways(self, entity_type: str, entity_id: str) -> List[Dict]:
         pathways = []
         if entity_type.lower() == "drug":
@@ -233,7 +230,7 @@ class Neo4jKnowledgeBase:
             })
         return pathways
 
-    # === 查询 Reference ===
+    # === Retrieve Reference ===
     def get_references_by_ids(self, ref_ids: List[str]) -> Dict[str, Dict]:
         if not ref_ids:
             return {}
@@ -251,7 +248,7 @@ class Neo4jKnowledgeBase:
                 ref_map[rid] = {"pmid": str(pmid), "title": title}
         return ref_map
 
-    # === 查询 SUPPORTED_BY 关系 ===
+    # === Retrieve SUPPORTED_BY relationships ===
     def get_supported_by_refs(self, node_id: str) -> List[str]:
         if not node_id:
             return []
@@ -266,4 +263,5 @@ class Neo4jKnowledgeBase:
             if ref_id:
                 refs.append(ref_id)
         return refs
+
 
