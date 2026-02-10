@@ -7,10 +7,10 @@ import unicodedata
 from functools import lru_cache
 from llm_model import KB
 
-# 加载 SciSpaCy 化学实体模型
+# Load SciSpaCy Chemical entity model
 nlp_chemical = spacy.load("en_ner_bc5cdr_sm",exclude=["tagger", "parser", "attribute_ruler", "lemmatizer"])
-# === 工具函数 ===
-# 文本标准化
+
+# Text Normalization
 def _normalize_text(s: str) -> str:
     if not s:
         return ""
@@ -20,11 +20,9 @@ def _normalize_text(s: str) -> str:
         s = s[:-1]
     return s
 
-# 预编译正则并缓存
 @lru_cache(maxsize=512)
 def _compile_word_boundary_pattern(candidate: str):
     cand_norm = _normalize_text(candidate)
-    # \b 匹配完整单词边界，忽略大小写
     return re.compile(rf"\b{re.escape(cand_norm)}\b", re.IGNORECASE)
 
 def _word_boundary_match(query: str, candidate: str) -> bool:
@@ -36,28 +34,23 @@ def _word_boundary_match(query: str, candidate: str) -> bool:
 
 
 def get_last_entity_of_type(entity_type="Drug", history=None) -> Dict[str, str]:
-    history = history or []  # 默认空列表
+    history = history or []  
     for past in reversed(history):
         for e in past.get("entities", []):
             if e.get("type") == entity_type:
                 return e
     return {}
 
-# === 实体抽取 ===
+# === Entity extraction ===
 def extract_entities(query: str, context_entities=None, use_history=True,history=None) -> List[Dict[str, str]]:
-    """
-    从单句或原子问题中抽取实体，并结合历史上下文回退。
-    使用 SciSpaCy en_ner_bc5cdr_md 模型识别化学/药物实体。
-    支持连续问句回退到上一条上下文实体。
-    """
     context_entities = context_entities or []
-    history = history or []  # 默认空列表
+    history = history or [] 
 
     query_norm = _normalize_text(query)
     entity_set = OrderedDict()
 
     # ------------------------------
-    # 1. SciSpaCy 化学/药物实体识别
+    # 1. SciSpaCy entity recognition
     # ------------------------------
     try:
         doc = nlp_chemical(query)
@@ -74,7 +67,7 @@ def extract_entities(query: str, context_entities=None, use_history=True,history
             entity_set[cand_norm.lower()] = {"id": cand_norm, "type": "Drug"}
 
     # --------------------------------------------
-    # 2. 上下文 / 历史回退：代词或上下文实体处理
+    # 2. conversational history and coreference resolution
     # --------------------------------------------
     pronouns = {"it", "they", "this", "that", "these", "those", "them", "its", "this drug", "drug"}
     has_pronoun = any(tok in pronouns for tok in query_norm.split())
@@ -91,7 +84,7 @@ def extract_entities(query: str, context_entities=None, use_history=True,history
                 entity_set.setdefault(key, {"id": chosen["id"], "type": chosen.get("type", "Drug")})
 
     # ---------------------------------------
-    # 3. 如果仍未识别，查询知识库匹配药物
+    # 3. If still unidentified, query the knowledge base for drug matching
     # ---------------------------------------
     if not entity_set:
         try:
@@ -108,9 +101,10 @@ def extract_entities(query: str, context_entities=None, use_history=True,history
                 entity_set[cand_norm.lower()] = {"id": cand_norm, "type": "Drug"}
 
     # ------------------------------
-    # 4. 最终兜底：unknown
+    # 4. Finally：unknown
     # ------------------------------
     if not entity_set:
         entity_set["__unknown_entity__"] = {"id": "unknown", "type": "unknown"}
 
     return list(entity_set.values())
+
