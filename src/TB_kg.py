@@ -4,21 +4,15 @@ import logging
 from typing import List, Dict
 from neo4j import GraphDatabase
 
-# === 日志配置 ===
-logging.basicConfig(level=logging.WARNING, format='%(levelname)s: %(message)s')
-
-# === 环境变量加载 ===
 with open("config.yaml", "r", encoding="utf-8") as f:
     CONFIG = yaml.safe_load(f)
 
-# === Neo4j 配置 ===
+# === Neo4j Configurations ===
 NEO4J_URI = CONFIG["neo4j"]["uri"]
 NEO4J_USER = CONFIG["neo4j"]["user"]
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
 
-
 class Neo4jKnowledgeBase:
-    """Neo4j Knowledge Base 封装类"""
     def __init__(self, uri: str, user: str, password: str):
         self.driver = GraphDatabase.driver(uri, auth=(user, password))
 
@@ -32,7 +26,6 @@ class Neo4jKnowledgeBase:
         self.close()
         return False
 
-    # === 内部方法：统一运行查询 ===
     def _run_query(self, query: str, **params) -> List[Dict]:
         """统一执行查询并返回结果列表"""
         try:
@@ -274,11 +267,3 @@ class Neo4jKnowledgeBase:
                 refs.append(ref_id)
         return refs
 
-# === 测试运行 ===
-if __name__ == "__main__":
-    with Neo4jKnowledgeBase(NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD) as kb:
-        drug_name = "Paromomycin"
-        kb.search_drug_targets(drug_name)
-        # print(json.dumps(kb.search_drug_targets(drug_name), ensure_ascii=False, indent=2))
-        # print(json.dumps(kb.search_experiments(drug_name), ensure_ascii=False, indent=2))
-        # print(json.dumps(kb.search_dstest_experiments(drug_name), ensure_ascii=False, indent=2))
