@@ -1,0 +1,22 @@
+# config.yaml
+neo4j:
+  uri: "bolt://localhost:7687"
+  user: "neo4j"
+
+llm:
+  model: "llama3.1:8b"
+  temperature: 0.3
+  max_tokens: 512
+  base_url: "http://localhost:11434/v1"
+
+#llm:
+#  base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"  # 不需要 base_url（DashScope SDK 内置）
+#  model: "qwen-turbo"   # qwen-plus / qwen-turbo/qwen-max
+#  temperature: 0.3
+#  max_tokens: 1500
+
+truncate:
+  max_experiments: 5
+
+context:
+  expiry_seconds: 3600  # 上下文有效期，单位秒
