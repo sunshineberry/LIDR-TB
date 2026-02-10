@@ -1,0 +1,16 @@
+{
+  "entries": [
+    { "id": "S1_Q1", "question": "What are the known targets of dicoumarol?", "context": "", "session_id": 1 },
+    { "id": "S1_Q2", "question": "For each of these targets, which biological pathways are they involved in?", "context": "", "session_id": 1 },
+    { "id": "S1_Q3", "question": "Can you summarize these pathway functions?", "context": "", "session_id": 1 },
+
+    { "id": "S2_Q1", "question": "What is the MIC value of disulfiram?", "context": "", "session_id": 2 },
+    { "id": "S2_Q2", "question": "Which type of test strain was used in this drug sensitivity test?", "context": "", "session_id": 2 },
+    { "id": "S2_Q3", "question": "Were multiple strains tested, or just a single strain?", "context": "", "session_id": 2 },
+
+    { "id": "S3_Q1", "question": "What type of drug is tafenoquine?", "context": "", "session_id": 3 },
+    { "id": "S3_Q2", "question": "Has tafenoquine been tested in any repurposing experiments for tuberculosis?", "context": "", "session_id": 3 },
+    { "id": "S3_Q3", "question": "What were the observed effects or outcomes from these repurposing experiments?", "context": "", "session_id": 3 },
+    { "id": "S3_Q4", "question": "Can you provide the references or publications reporting these repurposing studies?", "context": "", "session_id": 3 }
+  ]
+}

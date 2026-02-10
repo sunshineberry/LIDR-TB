@@ -1,0 +1,24 @@
+{
+  "entries": [
+    { "id": "Q1", "question": "What are the targets of Paromomycin?", "context": "", "session_id": 0 },
+    { "id": "Q2", "question": "Can you list the known gene targets of Triflusal?", "context": "", "session_id": 0 },
+    { "id": "Q3", "question": "What type of drug is Isoniazid classified as?", "context": "", "session_id": 0 },
+    { "id": "Q4", "question": "Has Mefloquine been approved yet?", "context": "", "session_id": 0 },
+    { "id": "Q5", "question": "What is Flupirtine primarily indicated for?", "context": "", "session_id": 0 },
+    { "id": "Q6", "question": "What are the biological pathways associated with nitrofural?", "context": "", "session_id": 0 },
+    { "id": "Q7", "question": "Are there any repositioning studies for quinacrine in TB treatment?", "context": "", "session_id": 0 },
+    { "id": "Q8", "question": "What effects were observed in the repurposing assays of Paromomycin?", "context": "", "session_id": 0 },
+    { "id": "Q9", "question": "Can you list the repurposing methods applied to Mefloquine?", "context": "", "session_id": 0 },
+    { "id": "Q10", "question": "What is the MIC value of Carprofen in drug sensitivity experiments?", "context": "", "session_id": 0 },
+    { "id": "Q11", "question": "What test strain types are associated with the artesunate DST results?", "context": "", "session_id": 0 },
+    { "id": "Q12", "question": "Which reference strain was used in the idarubicin sensitivity tests?", "context": "", "session_id": 0 },
+    { "id": "Q13", "question": "What are the targets of Xylomycin?", "context": "", "session_id": 0 },
+    { "id": "Q14", "question": "Can you list the UniProt ID of the Isepamicin target?", "context": "", "session_id": 0 },
+    { "id": "Q15", "question": "What is the pathway class of the KEGG pathway mapped from pknB?", "context": "", "session_id": 0 },
+    { "id": "Q16", "question": "Can you provide references linked to the Mefloquine repurposing assay?", "context": "", "session_id": 0 },
+    { "id": "Q17", "question": "Provide references reporting the gene targets of diacerein", "context": "", "session_id": 0 },
+    { "id": "Q18", "question": "Which biological pathways are experimentally associated with Triflusal in the treatment of tuberculosis?", "context": "", "session_id": 0 },
+    { "id": "Q19", "question": "Can Primaquine treat malaria?", "context": "", "session_id": 0 },
+    { "id": "Q20", "question": "What is your work today?", "context": "", "session_id": 0 }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "entries": [
+    {
+      "id": "S1_Q1",
+      "question": "What are the targets of Amlodipine and Acarbose?",
+      "context": "",
+      "session_id": 1
+    },
+    {
+      "id": "S2_Q1",
+      "question": "What is the MIC value of ebselen, and which reference strain was used in the experiment?",
+      "context": "",
+      "session_id": 2
+    },
+    {
+      "id": "S3_Q1",
+      "question": "What is the approved indication of Glimepiride, and is this drug currently approved or still in development?",
+      "context": "",
+      "session_id": 3
+    },
+    {
+      "id": "S4_Q1",
+      "question": "Are there any tuberculosis repositioning studies involving bromfenac, and what repurposing methods were used?",
+      "context": "",
+      "session_id": 4
+    },
+    {
+      "id": "S5_Q1",
+      "question": "For the target of loperamide, which pathway is it involved in, and is there any supporting reference?",
+      "context": "",
+      "session_id": 5
+    }
+  ]
+}
