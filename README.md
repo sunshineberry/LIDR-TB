@@ -3,7 +3,6 @@
 This repository contains the core implementation and benchmark datasets for the LIDR-TB platform.
 LIDR-TB (publicly available at http://lidrtb.sysbio.org.cn) is an LLM-integrated platform designed for the systematic and traceable exploration of TB repurposing knowledge. LIDR-TB integrates three core modules: a graph-structured knowledge base, an interactive network visualization engine, and a RAG-based question-answering model.
 
-<img width="649" height="597" alt="image" src="https://github.com/user-attachments/assets/c122627f-158b-4e38-a709-ea74a8de004a" />
 
 ## Project Structure
 - `data/`: Contains JSONL files for Single-Q, Contextual-Q, and Batch-Q benchmarks.
