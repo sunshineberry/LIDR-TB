@@ -1,8 +1,3 @@
-"""
-Q&A model整理
-千问LLM版本
-2026/1/5
-"""
 import time
 from typing import List, Dict
 from config import *
@@ -15,19 +10,18 @@ from jinja2 import Environment, FileSystemLoader
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
-# === 配置加载和 LLM 客户端初始化（只初始化一次） ===
 client = OpenAI(api_key=LLM_API_KEY, base_url=LLM_BASE_URL)
-# === 会话历史 ===
+
 conversation_history: List[Dict] = []
 MAX_HISTORY = 10
 if len(conversation_history) >= MAX_HISTORY:
     conversation_history.pop(0)
-# === 模板环境 ===
+
 env = Environment(loader=FileSystemLoader("./"))
 template = env.get_template("prompt.jinja2")
-# === 渲染缓存 ===
+
 render_cache = {}
-# === 工具函数 ===
+
 def get_last_entity_of_type(entity_type="Drug") -> Dict[str, str]:
     for past in reversed(conversation_history):
         for e in past.get("entities", []):
@@ -35,10 +29,10 @@ def get_last_entity_of_type(entity_type="Drug") -> Dict[str, str]:
                 return e
     return {}
 
-
 def subintent_to_neo4j_attr(sub_intent: str) -> str:
     return SUBINTENT_TO_NEO4J.get(sub_intent.lower(), sub_intent) if sub_intent else ""
-# === 意图识别 ===
+    
+# === Intent Recognition ===
 def detect_intent(user_query: str, query_entity) -> Dict:
     if isinstance(user_query, dict):
         user_query = user_query.get("question", "") or user_query.get("query", "") or ""
@@ -86,7 +80,6 @@ def detect_intent(user_query: str, query_entity) -> Dict:
         "context_link": context_link
     }
 
-# === 历史管理 ===
 def save_to_history(question: str, entities: List[Dict], intent_json: Dict):
     conversation_history.append({
         "question": question,
@@ -95,7 +88,7 @@ def save_to_history(question: str, entities: List[Dict], intent_json: Dict):
         "sub_intent": intent_json.get("sub_intent")
     })
 
-# === KB字段映射和数据处理 ===
+# === KB field mapping and data processing ===
 key_fields_map = {
     "drug information": {
         "name": "drug_name",
@@ -149,7 +142,7 @@ def process_pathway_results(raw_results):
         })
     return result
 
-# === 渲染模板和翻译 ===
+# === Prompt templates ===
 def render_prompt_cached(title, intent_data, intent_name):
     key = (title, json.dumps(intent_data, sort_keys=True))
     if key in render_cache:
@@ -163,11 +156,10 @@ def render_prompt_cached(title, intent_data, intent_name):
     render_cache[key] = rendered
     return rendered
 
-# === 核心查询函数（一次调用 LLM） ===
 def process_query(user_query: str):
     atomic_queries, query_entities = atomic_question_decomposition(user_query, nlp)
 
-    # 如果只有一个实体，就复用
+    # If only has one entity
     if len(query_entities) == 1:
         query_entities = query_entities * len(atomic_queries)
     intent_method_map = {
@@ -218,7 +210,6 @@ def process_query(user_query: str):
             "data": structured_data
         })
 
-    # 渲染模板并只调用一次 LLM
     prompt_text = render_prompt_cached(user_query, intent_data_list, intent_key)
     messages = [
         {"role": "system", "content": prompt_text},
@@ -232,7 +223,6 @@ def process_query(user_query: str):
     )
     return response.choices[0].message.content.strip()
 
-# === 批量处理 ===
 def batch_test(queries):
     results = {}
     for q in queries:
@@ -266,46 +256,18 @@ def process_entries_json(input_file, output_file):
 
     # print(f"Answers saved to {output_file}")
 
-# === 从文件读取问题列表 ===
-def load_queries_from_file(file_path: str):
-    """
-    读取 JSON 文件，提取每个 entry 的 question
-    """
-    with open(file_path, "r", encoding="utf-8") as f:
-        data = json.load(f)
-
-    # data["entries"] 是列表，每个 entry 都有 "question"
-    queries = [entry.get("question", "") for entry in data.get("entries", [])]
-    return queries
-
-# === 主程序示例 ===
 
 if __name__ == "__main__":
-    # test_sets = ["Single-Q","Contextual-Q","Batch-Q"]
-    # for t in test_sets:
-    #     input_file = "./test_sets/"+t+".json"  # 导入问题
-    #     queries = load_queries_from_file(input_file)
-    #     output_file = "./test_sets/intent_output/"+t+"_answers.json"
-    #
-    #     # 将答案返回到文件
-    #     process_entries_json(input_file, output_file)
-
-    # === 调试非批量测试用 ===
-
-    queries = ["What are the targets of Paromomycin?"]
-    # queries = ["What is the MIC value of ebselen, and which reference strain was used in the experiment?",
-    #            "What is the approved indication of Glimepiride, and is this drug currently approved or still in development?",
-    #            "Are there any tuberculosis repositioning studies involving bromfenac, and what repurposing methods were used?"]
-    #
-    start_time = time.time()  # 记录开始时间
+    queries = ["What is the MIC value of ebselen, and which reference strain was used in the experiment?",
+               "What is the approved indication of Glimepiride, and is this drug currently approved or still in development?",
+               "Are there any tuberculosis repositioning studies involving bromfenac, and what repurposing methods were used?"]
 
     batch_results = batch_test(queries)
     for q, english_answer in batch_results.items():
         print(q)
         print(english_answer)
         print("=" * 80)
-    end_time = time.time()  # 记录结束时间
-    elapsed = end_time - start_time
-    print(f"Processed {len(queries)} questions in {end_time - start_time:.3f} seconds")
+
+
 
 
