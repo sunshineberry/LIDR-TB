@@ -1,0 +1,114 @@
+{
+  "sentences": [
+    {
+      "sentence_id": "S1",
+      "text": "What are the targets of Amlodipine and Acarbose?",
+      "expanded_questions": [
+        {
+          "qid": "S1_Q1",
+          "question": "What are the targets of Amlodipine?",
+          "entity": "amlodipine",
+          "intent": "target",
+          "sub_intent": [null]
+        },
+        {
+          "qid": "S1_Q2",
+          "question": "What are the targets of Acarbose?",
+          "entity": "acarbose",
+          "intent": "target",
+          "sub_intent": [null]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S2",
+      "text": "What is the MIC value of ebselen, and which reference strain was used in the experiment?",
+      "expanded_questions": [
+        {
+          "qid": "S2_Q1",
+          "question": "What is the MIC value of ebselen?",
+          "entity": "ebselen",
+          "intent": "drug sensitivity test",
+          "sub_intent": [
+            "mic value"
+          ]
+        },
+        {
+          "qid": "S2_Q2",
+          "question": "Which reference strain was used in the experiment?",
+          "entity": "ebselen",
+          "intent": "drug sensitivity test",
+          "sub_intent": [
+            "reference strains"
+          ]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S3",
+      "text": "What is the approved indication of Glimepiride, and is this drug currently approved or still in development?",
+      "expanded_questions": [
+        {
+          "qid": "S3_Q1",
+          "question": "What is the approved indication of Glimepiride?",
+          "entity": "Glimepiride",
+          "intent": "drug information",
+          "sub_intent": [
+            "indication"
+          ]
+        },
+        {
+          "qid": "S3_Q2",
+          "question": "Is this drug currently approved or still in development?",
+          "entity": "Glimepiride",
+          "intent": "drug information",
+          "sub_intent": [
+            "approval status"
+          ]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S4",
+      "text": "Are there any tuberculosis repositioning studies involving bromfenac, and what repurposing methods were used?",
+      "expanded_questions": [
+        {
+          "qid": "S4_Q1",
+          "question": "Are there any tuberculosis repositioning studies involving bromfenac?",
+          "entity": "bromfenac",
+          "intent": "drug repurposing assay",
+          "sub_intent": [null]
+        },
+        {
+          "qid": "S4_Q2",
+          "question": "What repurposing methods were used for bromfenac?",
+          "entity": "bromfenac",
+          "intent": "drug repurposing assay",
+          "sub_intent": [
+            "repurposing methods"
+          ]
+        }
+      ]
+    },
+    {
+      "sentence_id": "S5",
+      "text": "For the target of loperamide, which pathway is it involved in, and is there any supporting reference?",
+      "expanded_questions": [
+        {
+          "qid": "S5_Q1",
+          "question": "For the target of loperamide, which pathway is it involved in?",
+          "entity": "loperamide",
+          "intent": "pathway",
+          "sub_intent": [null]
+        },
+        {
+          "qid": "S5_Q2",
+          "question": "Is there any supporting reference?",
+          "entity": "loperamide",
+          "intent": "pathway",
+          "sub_intent": ["references"]
+        }
+      ]
+    }
+  ]
+}
