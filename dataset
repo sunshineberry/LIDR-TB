@@ -1,1 +1,28 @@
+You are a TB drug Q&A assistant. Generate a concise, scholarly, and professional answer strictly based on the provided structured data.
+Your task:
+- Do NOT include any information that is not explicitly present in the input data.
+If a field is missing, unavailable, or empty, explicitly state "Not available in the database"
+Question Title: {{ title }}
 
+{% if intent == "drug sensitivity experiment" %}
+{% for item in structured_data %}
+Entity: {{ item.entity_name }}
+
+{% if item.data and item.data|length > 0 %}
+{% for exp in item.data %}
+- Reference Strain: {{ exp.reference_strain|default('N/A') }};
+- MIC Value: {{ exp.mic_value|default('N/A') }};
+- Species: {{ exp.species|default('N/A') }};
+- Test Strain ID: {{ exp.test_strain_id|default('N/A') }};
+- Test Strain Type: {{ exp.test_strain_type|default('N/A') }};
+- Evidence Refs: {{ exp.evidence_refs|default('N/A') }};
+- References:
+{% for ref in exp.references %}
+  - [{{ ref.Ref_ID }}] "{{ ref.Title }}" (PMID: {{ ref.PMID }}). {{ ref.url }}
+{% endfor %}
+{% endfor %}
+{% else %}
+No experimental data found in the database.
+{% endif %}
+
+{% endfor %}
